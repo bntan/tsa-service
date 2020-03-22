@@ -1,0 +1,152 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"description": "TSA service REST API description. This service is used to timestamp PDF documents.",
+		"version": "1.0.0",
+		"title": "TSA service",
+		"contact": {
+			"name": "Bun-Ny TAN",
+			"url": "https://www.bntan.com",
+			"email": "me@bntan.com"
+		}
+	},
+	"host": "[host]",
+	"basePath": "/bntan/service",
+	"tags": [{
+		"name": "Timestamp",
+		"description": "Timestamp service"
+	}],
+	"schemes": [
+		"http",
+		"https"
+	],
+	"paths": {
+		"/timestamp": {
+			"post": {
+				"tags": [
+					"Timestamp"
+				],
+				"summary": "Timestamp a PDF document",
+				"operationId": "timestamp",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [{
+					"in": "body",
+					"name": "request",
+					"required": true,
+					"description": "The timestamp request",
+					"schema": {
+						"$ref": "#/definitions/request"
+					}
+				}],
+				"responses": {
+					"200": {
+						"description": "The timestamp success response",
+						"schema": {
+							"$ref": "#/definitions/response"
+						}
+					},
+					"500": {
+						"description": "The timestamp error response",
+						"schema": {
+							"$ref": "#/definitions/response"
+						}
+					}
+				}
+			}
+		}
+	},
+	"definitions": {
+		"request": {
+			"type": "object",
+			"required": [
+				"id",
+				"input"
+			],
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "Document ID"
+				},
+				"input": {
+					"type": "string",
+					"format": "base 64",
+					"description": "PDF document to timestamp encoded in base 64"
+				},
+				"timestamp-server": {
+					"type": "string",
+					"description": "Timestamp server name to use"
+				}
+			}
+		},
+		"response": {
+			"type": "object",
+			"required": [
+				"id",
+				"traces"
+			],
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "Document ID"
+				},
+				"output": {
+					"type": "string",
+					"format": "base 64",
+					"description": "Timestamped PDF encoded in base 64"
+				},
+				"error-message": {
+					"type": "string",
+					"description": "Error message (Ex: Error when reading input, Error when timestamping PDF...)"
+				},
+				"traces": {
+					"type": "array",
+					"description": "Operation traces",
+					"items": {
+						"$ref": "#/definitions/traces"
+					}
+				}
+			}
+		},
+		"traces": {
+			"type": "object",
+			"properties": {
+				"operation": {
+					"type": "string",
+					"enum": [
+						"READ_INPUT",
+						"TIMESTAMP",
+						"WRITE_OUTPUT",
+						"OTHER"
+					],
+					"description": "Operation"
+				},
+				"source": {
+					"type": "string",
+					"description": "Timestamp server used"
+				},
+				"status": {
+					"type": "string",
+					"enum": [
+						"OK",
+						"KO",
+						"ERROR"
+					],
+					"description": "Operation status"
+				},
+				"message": {
+					"type": "string",
+					"description": "Operation message"
+				},
+				"duration": {
+					"type": "integer",
+					"description": "Operation duration in ms"
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,6 @@
+/.idea
+/*.iml
+/tsa-service-api/*.iml
+/tsa-service-web/*.iml
+/tsa-service-api/target
+/tsa-service-web/target
