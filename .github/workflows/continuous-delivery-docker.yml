@@ -1,25 +1,10 @@
-name: TSA service CD
+name: TSA service CD Docker
 
 on:
   release:
     types: [created]
 
 jobs:
-
-  publish-jar:
-    name: TSA service - PUBLISH JAR
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: 12
-      - name: Publish (GitHub Packages)
-        run: mvn -B deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish-docker:
     name: TSA service - PUBLISH DOCKER
